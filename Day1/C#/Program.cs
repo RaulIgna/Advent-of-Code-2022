@@ -1,50 +1,26 @@
-﻿string[] text = System.IO.File.ReadAllLines("@../../../../../input.in"); // Get all values from a file
+﻿// Get the elf with the most calories
+var text = System.IO.File.ReadAllText("../../../../input.in"); // Get all lines as text
 
-int[] value = new int[text.Length]; // Create array of int
+var line = text.Split("\r\n\r\n"); // Separate each elf
 
-for(int i = 0; i < text.Length;i++)
+List<int> elfs = new List<int>(); 
+foreach (var it in line) // For every elf
 {
-    value[i] = Convert.ToInt32(text[i]); // Convert from string to int32
-}
-
-Array.Sort(value); // Sort them
-
-void Part1()
-{
-    foreach (int it in value)
+    var numbers = it.Split("\n");
+    int sum = 0;
+    foreach (var number in numbers)
     {
-        foreach (int it2 in value)
+        int temp;
+        if (Int32.TryParse(number, out temp)) // Parse the numbers to int, ignore new line
         {
-            if (it == it2) continue;
-            if (it + it2 == 2020)
-            {
-                Console.Write("First part: ");
-                Console.WriteLine(it * it2);
-                return;
-            }
+            sum += temp;
         }
+        elfs.Add(sum); // Add result to a list
     }
 }
 
-void Part2()
-{
-    foreach (int it in value)
-    {
-        foreach (int it2 in value)
-        {
-            foreach (int it3 in value)
-            {
-                if (it == it2 || it2 == it3 || it == it3) continue;
-                if (it + it2 + it3 == 2020)
-                {
-                    Console.Write("Second part: ");
-                    Console.WriteLine(it * it2 * it3);
-                    return;
-                }
-            }
-        }
-    }
-}
+elfs = elfs.OrderByDescending(n => n).ToList(); // Sort the list to get the highest first
 
-Part1();
-Part2();
+Console.WriteLine($"{elfs[0]} {elfs[0] + elfs[1] + elfs[2]}"); // Display the results
+
+
